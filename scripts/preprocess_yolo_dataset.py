@@ -34,11 +34,12 @@ def convert_labels(input_json, images_dir, output_dir_images, output_dir_labels)
             
             
 def split_dataset(
+    data_dir,
     processed_images_dir,
     processed_labels_dir,
     train_ratio=0.7,
-    eval_ratio=0.15,
-    test_ratio=0.15,
+    eval_ratio=0.25,
+    test_ratio=0.05,
     random_state=42
 ):
     """
@@ -87,15 +88,15 @@ def split_dataset(
     }
 
     for subset, ids in subsets.items():
-        subset_images_dir = os.path.join(processed_images_dir, subset)
-        subset_labels_dir = os.path.join(processed_labels_dir, subset)
+        subset_images_dir = os.path.join(data_dir, 'yalo', subset, 'images')
+        subset_labels_dir = os.path.join(data_dir, 'yalo', subset, 'labels')
 
         for image_id in ids:
             # Copy image
             src_image = os.path.join(processed_images_dir, f"{image_id}.jpg")
             dest_image = os.path.join(subset_images_dir, f"{image_id}.jpg")
             if os.path.exists(src_image):
-                move(src_image, dest_image)
+                copyfile(src_image, dest_image)
             else:
                 print(f"Warning: Image {src_image} does not exist.")
 
@@ -103,7 +104,7 @@ def split_dataset(
             src_label = os.path.join(processed_labels_dir, f"{image_id}.txt")
             dest_label = os.path.join(subset_labels_dir, f"{image_id}.txt")
             if os.path.exists(src_label):
-                move(src_label, dest_label)
+                copyfile(src_label, dest_label)
             else:
                 print(f"Warning: Label file {src_label} does not exist.")
 
@@ -115,8 +116,8 @@ if __name__ == "__main__":
     DATA_PATH = os.path.join(os.getcwd(), 'data')
     INPUT_MAPPING = os.path.join(DATA_PATH, 'probe_labels.json')
     RAW_IMAGES = os.path.join(DATA_PATH, 'raw_images')
-    PROCESSED_IMAGES = os.path.join(DATA_PATH, 'images')
-    PROCESSED_LABELS = os.path.join(DATA_PATH, 'labels')
+    PROCESSED_IMAGES = os.path.join(DATA_PATH, 'processed_images')
+    PROCESSED_LABELS = os.path.join(DATA_PATH, 'processed_labels')
 
     # Convert labels and preprocess images
     convert_labels(
@@ -128,10 +129,8 @@ if __name__ == "__main__":
 
     # Split the dataset into train, eval, and test
     split_dataset(
+        data_dir=DATA_PATH,
         processed_images_dir=PROCESSED_IMAGES,
         processed_labels_dir=PROCESSED_LABELS,
-        train_ratio=0.7,
-        eval_ratio=0.15,
-        test_ratio=0.15,
         random_state=42
     )
