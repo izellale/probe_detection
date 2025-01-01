@@ -1,4 +1,4 @@
-path: ../data/yalo # dataset root dir
+path: ../../data/yalo # dataset root dir
 train: train/images # train images 
 val: val/images # val images
 test: test/images # test images
