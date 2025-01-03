@@ -38,8 +38,8 @@ def split_dataset(
     processed_images_dir,
     processed_labels_dir,
     train_ratio=0.7,
-    eval_ratio=0.25,
-    test_ratio=0.05,
+    eval_ratio=0.15,
+    test_ratio=0.15,
     random_state=42
 ):
     """
@@ -52,6 +52,7 @@ def split_dataset(
     :param test_ratio: Proportion of data to be used for testing.
     :param random_state: Seed.
     """
+    assert (train_ratio + eval_ratio + test_ratio) == 1
 
     # List all image IDs based on image filenames
     image_files = [f for f in os.listdir(processed_images_dir) if f.endswith('.jpg')]
@@ -83,7 +84,7 @@ def split_dataset(
 
     subsets = {
         'train': train_ids,
-        'eval': eval_ids,
+        'val': eval_ids,
         'test': test_ids
     }
 
