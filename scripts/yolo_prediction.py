@@ -6,11 +6,8 @@ import tempfile
 from PIL import Image
 
 
-def predict_image(model_name, image):
-    model_path = os.path.join(os.path.dirname(os.getcwd()), 'models', 'yalo', model_name, 'weights', 'best.pt')
-    model = YOLO(model_path)
-    
-    device = 'cpu' # 0 if torch.cuda.is_available else 'cpu'
+def predict_image(model, image):
+    device = 0 if torch.cuda.is_available else 'cpu'
         
     # Save the uploaded image to a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp_file:
@@ -23,22 +20,24 @@ def predict_image(model_name, image):
         conf=0.7,
         device=device
     )
-        
-
+    
     # Initialize detected flag
     detected = False
+    inference_speed = None
     
     for r in result:
         if r.boxes:
             detected = True
-            # Draw bounding boxes on the image
-            img_with_boxes = r.plot()
+            
+            img_with_boxes = r.plot(labels=False)
+            inference_speed = r.speed['inference']
+            
             # Remove temporary image file
             os.remove(img_path)
-            return img_with_boxes, detected
+            return img_with_boxes, detected, inference_speed
         else:
             # If no detections, return original image
             img = np.array(image)
             # Remove temporary image file
             os.remove(img_path)
-            return img, detected
+            return img, detected, inference_speed

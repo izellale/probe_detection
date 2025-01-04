@@ -1,7 +1,7 @@
 import streamlit as st
 import os
-import numpy as np
 from PIL import Image
+from ultralytics import YOLO
 
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.getcwd()), 'scripts'))
@@ -11,24 +11,28 @@ from yolo_prediction import predict_image
 st.title("Metallic Probe Detection")
 st.write("Upload an image, and the model will detect the metallic probe.")
 
-# Model name input
-model_name = 'YOLOv11_Small_Augmentation_Scratch' # st.text_input("Enter the model name:", value="my_yolo_model")
+@st.cache_resource
+def load_model():
+    model_name = 'YOLOv11_Small_Augmentation_PreTrained'
+    model_path = os.path.join(os.path.dirname(os.getcwd()), 'models', 'yalo', model_name, 'weights', 'best.pt')
+    return YOLO(model_path)
+
+yolo_model = load_model()
 
 # Image uploader
 uploaded_file = st.file_uploader("Choose an image...", type=['jpg', 'jpeg', 'png'])
 
 if uploaded_file is not None:
-    # Read the uploaded image
     image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image', use_column_width=True)
 
     # Predict button
     if st.button("Detect"):
         with st.spinner('Processing...'):
-            img_with_boxes, detected = predict_image(model_name, image)
-            st.image(img_with_boxes, caption='Processed Image', use_column_width=True)
-
+            img_with_boxes, detected, inference_speed = predict_image(yolo_model, image)
+            
             if detected:
-                st.success("Metallic probe detected!")
+                st.success(f"Metallic probe detected in {inference_speed:.2f} ms !", icon="✅")
+                st.image(img_with_boxes, caption='Image with Detected Probe', use_container_width=True)
             else:
-                st.warning("Warning: The model did not detect the metallic probe.")
+                st.error("The model did not detect the metallic probe.", icon="🚨")
+                st.image(img_with_boxes, caption='Original Image', use_container_width=True)
