@@ -1,6 +1,6 @@
 # Probe Detection Project
 
-This project involves training, evaluating, and deploying multiple YOLOv11 object detection models. The models are trained on a custom dataset with different configurations, evaluated on test data, and deployed through a Streamlit application for real-time predictions.
+This project involves training, evaluating, and deploying multiple YOLOv11 object detection models. The models are trained on a custom dataset with different configurations, evaluated on test data, and deployed through a Streamlit application for real-time predictions
 
 ## Table of Contents
 
@@ -58,14 +58,14 @@ This project involves training, evaluating, and deploying multiple YOLOv11 objec
 
 The dataset is organized into three subsets:
 
-1. **Training Set (`data/train/`):** Used for training the models.
-2. **Validation Set (`data/val/`):** Used for validating the model during training.
-3. **Test Set (`data/test/`):** Used for evaluating the final model performance.
+1. **Training Set (`data/train/`):** Used for training the models
+2. **Validation Set (`data/val/`):** Used for validating the model during training
+3. **Test Set (`data/test/`):** Used for evaluating the final model performance
 
 Each subset contains:
 
-- `images/`: The images used for training/testing.
-- `labels/`: Corresponding annotation files in YOLO format.
+- `images/`: The images used for training/testing
+- `labels/`: Corresponding annotation files in YOLO format
 
 ---
 
@@ -88,16 +88,16 @@ Eight different YOLOv11 models are trained with varying configurations:
 
 ## Model Evaluation
 
-Models are evaluated on the test dataset to compare performance metrics and inference speed.
+Models are evaluated on the test dataset to compare performance metrics and inference speed
 
 ### Performance Metrics
 
 The key metrics used for evaluation include:
 
-- **Precision:** The ratio of true positives to the sum of true and false positives.
-- **Recall:** The ratio of true positives to the sum of true positives and false negatives.
-- **mAP@50:** Mean Average Precision at an IoU threshold of 0.5.
-- **mAP@50-95:** Mean Average Precision averaged over IoU thresholds from 0.5 to 0.95.
+- **Precision:** The ratio of true positives to the sum of true and false positives
+- **Recall:** The ratio of true positives to the sum of true positives and false negatives
+- **mAP@50:** Mean Average Precision at an IoU threshold of 0.5
+- **mAP@50-95:** Mean Average Precision averaged over IoU thresholds from 0.5 to 0.95
 
 ---
 
@@ -106,7 +106,6 @@ The key metrics used for evaluation include:
 The `app.py` file contains the Streamlit application, which allows users to:
 
 - Upload an image.
-- Select a model for prediction.
 - View the detection results with bounding boxes.
 - See whether objects were detected in the image.
 
